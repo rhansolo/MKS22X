@@ -1,16 +1,22 @@
 public class Recursion{
     
-    public static int fact(int n){
+    public int fact(int n){
+	if (n < 0){
+	    throw new IllegalArgumentException();
+	}
 	if (n == 0){
 	    return 1;
 	}
 	return n * fact(n-1);
     }
-    public static int fib(int n){
+    public int fib(int n){
 	return fibHelp(n,0,1);
     }
     
     private static int fibHelp(int n, int x, int y){
+	if (n < 0){
+	    throw new IllegalArgumentException();
+	}
 	if (n == 0){
 	    return 0;
 	}
@@ -19,7 +25,13 @@ public class Recursion{
 	}
 	return fibHelp(n-1, y, x+y);
     }
-    public static double sqrt(double n){
+    public double sqrt(double n){
+	if (n < 0){
+	    throw new IllegalArgumentException();
+	}
+	if (n == 0){
+	    return 0.;
+	}
 	return sqrtHelp(1.0,n);
     }
     private static double sqrtHelp(double guess, double n){
@@ -35,6 +47,6 @@ public class Recursion{
 	//	System.out.println(fact(4));
 	//	System.out.println(fact(6));
 	//	System.out.println(fib(10));
-	System.out.println(sqrt(2));
+	//System.out.println(sqrt(-1));
     }
 }
