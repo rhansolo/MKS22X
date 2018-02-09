@@ -1,0 +1,52 @@
+public class QueenBoard{
+    private int[][] board;
+    public QueenBoard(int size){
+	board = new int[size][size];
+    }
+    public String toString(){
+	String tmp = "";
+	for (int i = 0; i < board.length; i++){
+	    for (int j = 0; j < board[0].length; j++){
+		if (board[i][j] < 0){
+		    tmp += "Q ";
+		}
+		else{
+		    tmp += "_ ";
+		}
+	    }
+	    tmp += "\n";
+
+	}
+	return tmp;
+    }
+    public boolean solve(){
+	return true;
+    }
+    public int countSolutions(){
+	return 0;
+    }
+    private boolean addQueen(int r, int c){
+	if (board[r][c] >= 0){
+	    board [r][c] = -1;
+	    changeBoard(1,r,c);
+	}
+	
+    }
+    private boolean removeQueen(int r, int c){
+	return true;
+    }
+    private boolean changeBoard(int increment, int r, int c){
+	for (int i = 0; i < r; i ++){
+	    board[i][c] += increment;
+	}
+	for (int i = r + 1; i < board; i++){
+	    board[i][c] += increment;
+	}
+	for (int j = 0; j < c; j++){
+	    board [r][j] += increment;
+	}
+	for (int j = c + 1; j < board; j++){
+	    board[r][j] += increment;
+	}
+    }
+}
