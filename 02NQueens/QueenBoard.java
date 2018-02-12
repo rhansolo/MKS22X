@@ -1,5 +1,6 @@
 public class QueenBoard{
     private int[][] board;
+    private int sol;
     public QueenBoard(int size){
 	board = new int[size][size];
     }
@@ -11,7 +12,8 @@ public class QueenBoard{
 		    tmp += "Q ";
 		}
 		else{
-		    tmp += "" + board[i][j] + " ";
+		    //tmp += "" + board[i][j] + " ";
+		    tmp += "_ ";
 		}
 	    }
 	    tmp += "\n";
@@ -20,14 +22,45 @@ public class QueenBoard{
 	return tmp;
     }
     public boolean solve(){
-	return true;
+	return solveHelper(0);
+    }
+    public boolean solveHelper(int col){
+	if (col == board.length - 1){
+	    return true;
+	}
+	for (int row = 0; row < board.length; row++){
+	    addQueen(row,col);
+	    if (solveHelper(col + 1)){
+		return true;
+	    }
+	    removeQueen(row,col);
+	}
+	return false;
     }
     public int countSolutions(){
-	return 0;
+	countSolutionsHelper(0);
+	return sol;
+    }
+    public boolean countSolutionsHelper(int col){
+	if (col == board.length - 1){
+	    sol ++;
+	    return true;
+	}
+	for (int row = 0; row < board.length; row++){
+	    addQueen(row,col);
+	    if (countSolutionsHelper(col + 1)){
+		return true;
+	    }
+	    removeQueen(row,col);
+	}
+	return false;
     }
     public boolean addQueen(int r, int c){
-	changeBoard(r,c,1);
-	return true;
+	if (board[r][c] >= 0){
+	    changeBoard(r,c,1);
+	    return true;
+	}
+	return false;
     }
     public  boolean removeQueen(int r, int c){
 	changeBoard(r,c,-1);
