@@ -22,49 +22,66 @@ public class QueenBoard{
 	return tmp;
     }
     public boolean solve(){
+	for(int r = 0;r < board.length;r++){
+	    for(int c = 0;c < board[0].length;c++){
+		if(board[r][c] != 0){
+		    throw new IllegalStateException();
+		}
+	    }
+	}
 	return solveHelper(0);
     }
     public boolean solveHelper(int col){
-	if (col == board.length - 1){
+	if (col >= board.length){
 	    return true;
 	}
 	for (int row = 0; row < board.length; row++){
-	    addQueen(row,col);
-	    if (solveHelper(col + 1)){
-		return true;
+	    if ( addQueen(row,col)){
+		if (solveHelper(col + 1)){
+		    return true;
+		}
+		removeQueen(row,col);
 	    }
-	    removeQueen(row,col);
 	}
 	return false;
     }
     public int countSolutions(){
+	for(int r = 0;r < board.length;r++){
+	    for(int c = 0;c < board[0].length;c++){
+		if(board[r][c] != 0){
+		    throw new IllegalStateException();
+		}
+	    }
+	}
 	countSolutionsHelper(0);
 	return sol;
     }
     public boolean countSolutionsHelper(int col){
-	if (col == board.length - 1){
+	if (col >= board.length){
 	    sol ++;
 	    return true;
 	}
 	for (int row = 0; row < board.length; row++){
-	    addQueen(row,col);
-	    if (countSolutionsHelper(col + 1)){
-		return true;
+	    if (addQueen(row,col)){
+		countSolutionsHelper(col + 1);
+		removeQueen(row,col);
 	    }
-	    removeQueen(row,col);
-	}
+	} 
 	return false;
     }
     public boolean addQueen(int r, int c){
-	if (board[r][c] >= 0){
+	if (board[r][c] == 0){
 	    changeBoard(r,c,1);
 	    return true;
 	}
 	return false;
     }
     public  boolean removeQueen(int r, int c){
-	changeBoard(r,c,-1);
-	return true;
+	if (board[r][c] == -1){
+	    changeBoard(r,c,-1);
+	    return true;
+	}
+	return false;
     }
     private boolean changeBoard(int r, int c, int increment){
 	for (int i = 0; i < board.length; i++){	    
