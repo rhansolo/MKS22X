@@ -15,6 +15,13 @@ public class KnightBoard{
 	if (level == board.length*board[0].length){
 	    return true;
 	}
+	for (int i = 0; i < 8; i++){
+	    int tmpxCor = row + xmove[i];
+	    int tmpyCor = col + ymove[i];
+	    if (tmpxCor < board.length && tmpyCor < board[0].length && ymoveboard[row + xmove[i]][col+ymove[i]] == 0){
+		solveH(tmpxCor,tmpyCor,level +=1);
+	    }
+	}
 	
     }
 }
