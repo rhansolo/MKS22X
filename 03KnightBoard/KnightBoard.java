@@ -3,11 +3,12 @@ public class KnightBoard{
     int[] ymove = new int[]{2,1,-1,-2,-2,-1,1,2};
     int[][] board;
     public KnightBoard(int r, int c){
+	if (r < 0 || c < 0){
+	    throw new IllegalArgumentException("Invalid board size");
+	}
 	board = new int[r][c];
     }
-    public boolean solve(int startingRow, int startingCol){
-	return solveH(startingRow,startingCol,1);
-    }
+
     public String toString(){
 	String tmp = "";
 	for (int i = 0; i < board.length; i++){
@@ -29,17 +30,20 @@ public class KnightBoard{
 	return tmp;
     }
     public int countSolutions(int startingRow, int startingCol){
+	if (startingRow>=board.length || startingCol>=board[0].length ||startingRow<0 || startingCol<0){
+	   throw new IllegalArgumentException("negative parameters");
+	}
 	return countSolutionsH(startingRow,startingCol,0,1);
     }
     private int countSolutionsH(int row, int col, int total, int level){
-	if (row>=board.length || col>=board[0].length ||
-	    row<0 || col<0){
+	if (row>=board.length || col>=board[0].length ||row<0 || col<0){
 	    return 0;
 	}
 	if (board[row][col]>0){
 	    return 0;
 	}
-	board[row][col] = level;
+
+ 	board[row][col] = level;
 	if (level == board[0].length * board.length){
 	    board[row][col] = 0;
 	    return 1;
@@ -53,6 +57,12 @@ public class KnightBoard{
 	}
 	board[row][col] = 0;
 	return total;
+    }
+    public boolean solve(int startingRow, int startingCol){
+	if (startingRow>=board.length || startingCol>=board[0].length ||startingRow<0 || startingCol<0){
+	   throw new IllegalArgumentException("negative parameters");
+	}
+	return solveH(startingRow,startingCol,1);
     }
     private boolean solveH(int row, int col, int level){
 	if (level == board.length*board[0].length){
