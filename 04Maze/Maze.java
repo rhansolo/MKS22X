@@ -23,30 +23,40 @@ public class Maze{
     public Maze(String filename){
 	animate = false;
 	try{
-	    File text = new File("input.txt");
+	    File text = new File(filename);
+	    Scanner inf = new Scanner(text);
+	    Scanner inf2 = new Scanner(text);
+	    int row = 0;
+	    int col = 0;
+	    while (inf.hasNextLine()){
+		String line = inf.nextLine();
+		row ++;
+		col = line.length();
+		maze = new char[row][col];
+	    }
+	    for(int k = 0; k < row; k++){
+		String line = inf2.nextLine();
+		for (int i = 0; i < col; i++){
+		    maze[k][i] = line.charAt(i);
+		}
+	    }
 	}
 	catch (FileNotFoundException e){
 	    System.out.println("wyd... ur so uglyyyyyyyyyyy");
-	    throw e;
 	}
-	Scanner inf = new Scanner(text);
-	Scanner inf2 = new Scanner(text);
-	int row = 0;
-	int col = 0;
-	while (inf.hasNextLine()){
-	    String line = inf.nextLine();
-	    row ++;
-	    col = line.length();
-	    maze = new char[row][col];
-	}
-	for(int k = 0; k < row; k++){
-	    String line = inf2.nextLine();
-	    for (int i = 0; i < col; i++){
-		maze[k][i] = line.charAt(i);
-	    }
-	}
+
     }
-    
+
+    public String toString(){
+	String tmpString = "";
+	for (int i = 0; i < maze.length; i++){
+	    for (int j = 0; j < maze[0].length; j++){
+		tmpString += (maze[i][j]);
+	    }
+	    tmpString += "\n";
+	}
+	return tmpString;
+    }
     
     private void wait(int millis){
          try {
@@ -91,7 +101,7 @@ public class Maze{
 	//and start solving at the location of the s.
 	
 	//return solve(???,???);
-	
+	return 0;
     }
     
     /*
