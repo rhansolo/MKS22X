@@ -21,7 +21,7 @@ public class Maze{
     */
     
     public Maze(String filename){
-	animate = false;
+	animate = true;
 	try{
 	    File text = new File(filename);
 	    Scanner inf = new Scanner(text);
@@ -93,7 +93,15 @@ public class Maze{
     public int solve(){
 	
 	//find the location of the S. 
-	
+	for (int i = 0; i < maze.length; i++){
+	    for (int j = 0; j < maze[0].length;j++){
+		if (maze[i][j] == 'S'){
+		    maze[i][j] = '@';
+		    System.out.println("" + i + "" + j);
+		    return solve(i,j);
+		}
+	    }
+	}
 	
 	//erase the S
 	
@@ -122,9 +130,9 @@ public class Maze{
       Note: This is not required based on the algorithm, it is just nice visually to see.
       All visited spots that are part of the solution are changed to '@'
     */
-    private int solve(int row, int col){ //you can add more parameters since this is private
 	
-	
+    private int solve(int row, int col){
+	//you can add more parameters since this is private
         //automatic animation! You are welcome.
         if(animate){
 	    
@@ -135,6 +143,25 @@ public class Maze{
         }
 	
         //COMPLETE SOLVE
+	System.out.println("here");
+	System.out.println("row: " + row + " col: " + col);
+	if (maze[row+1][col] != '#'){
+	    maze[row+1][col] = '@';
+	    solve(row+1,col);
+	}
+	if (maze[row][col+1] != '#'){
+	    maze[row][col+1] = '@';
+	    solve(row,col+1);
+	}
+	if (maze[row-1][col] != '#'){
+	    maze[row-1][col] = '@';
+	    solve(row-1,col);
+	}
+	if (maze[row][col-1] != '#'){
+	    maze[row][col-1] = '@';
+	    solve(row,col-1);
+	}
+	System.out.println("nothing");
 	
         return -1; //so it compiles
     }
