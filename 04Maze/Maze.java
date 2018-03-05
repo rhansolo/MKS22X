@@ -3,7 +3,8 @@ import java.io.*;
 public class Maze{
     private char[][]maze;
     private boolean animate;//false by default
-    private int count = 0;;
+    private int count = 0;
+    private int startx, starty;
     /*Constructor loads a maze text file, and sets animate to false by default.
       
       1. The file contains a rectangular ascii maze, made with the following 4 characters:
@@ -21,7 +22,7 @@ public class Maze{
     */
     
     public Maze(String filename){
-	animate = true;
+	animate = false;
 	try{
 	    File text = new File(filename);
 	    Scanner inf = new Scanner(text);
@@ -96,7 +97,8 @@ public class Maze{
 	for (int i = 0; i < maze.length; i++){
 	    for (int j = 0; j < maze[0].length;j++){
 		if (maze[i][j] == 'S'){
-		    System.out.println("" + i + "" + j);
+		    startx = i;
+		    starty = j;
 		    return solve(i,j);
 		}
 	    }
@@ -151,10 +153,11 @@ public class Maze{
 	else if (maze[row+1][col] != '#'&& maze[row+1][col] != '@'&& maze[row+1][col] != '.'){
 	    
 	    maze[row][col] = '@';
-	    if (count == 0){
+	    if (count == 0 ){
 		maze[row][col] = 'S';
 	    }
 	    count++;
+	    
 	    solve(row+1,col);
 	}
         else if (maze[row][col+1] != '#' && maze[row][col+1] != '@'&& maze[row][col+1] != '.'){
