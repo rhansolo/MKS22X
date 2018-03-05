@@ -3,7 +3,6 @@ import java.io.*;
 public class Maze{
     private char[][]maze;
     private boolean animate;//false by default
-    private int count = 0;
     private int startx, starty;
     /*Constructor loads a maze text file, and sets animate to false by default.
       
@@ -99,7 +98,7 @@ public class Maze{
 		if (maze[i][j] == 'S'){
 		    startx = i;
 		    starty = j;
-		    return solve(i,j);
+		    return solve(i,j,0);
 		}
 	    }
 	}
@@ -132,7 +131,7 @@ public class Maze{
       All visited spots that are part of the solution are changed to '@'
     */
 	
-    private int solve(int row, int col){
+    private int solve(int row, int col, int count){
 	//you can add more parameters since this is private
         //automatic animation! You are welcome.
         if(animate){
@@ -156,9 +155,8 @@ public class Maze{
 	    if (count == 0 ){
 		maze[row][col] = 'S';
 	    }
-	    count++;
-	    
-	    solve(row+1,col);
+	    count += 1;
+	    solve(row+1,col,count);
 	}
         else if (maze[row][col+1] != '#' && maze[row][col+1] != '@'&& maze[row][col+1] != '.'){
 	    
@@ -167,7 +165,7 @@ public class Maze{
 		maze[row][col] = 'S';
 	    }
 	    count++;
-	    solve(row,col+1);
+	    solve(row,col+1,count);
 	}
         else if (maze[row-1][col] != '#'&& maze[row-1][col] != '@'&& maze[row-1][col] != '.'){
 	    
@@ -176,7 +174,7 @@ public class Maze{
 		maze[row][col] = 'S';
 	    }
 	    count++;
-	    solve(row-1,col);
+	    solve(row-1,col,count);
 	}
         else if (maze[row][col-1] != '#'&& maze[row][col-1] != '@'&& maze[row][col-1] != '.'){
 	    
@@ -185,7 +183,7 @@ public class Maze{
 		maze[row][col] = 'S';
 	    }
 	    count++;
-	    solve(row,col-1);
+	    solve(row,col-1,count);
 	}
 	
 	//maze[row][col] = '.';
@@ -193,24 +191,24 @@ public class Maze{
 	else if (maze[row+1][col] == '@'){
 	    maze[row][col] = '.';
 	    count--;
-	    solve(row+1,col);
+	    solve(row+1,col,count);
 	}
         else if (maze[row][col+1] == '@'){
 	    maze[row][col] = '.';
 	    count--;
-	    solve(row,col+1);
+	    solve(row,col+1,count);
 	}
         else if (maze[row-1][col] == '@'){
 	    maze[row][col] = '.';
 	    count--;
-	    solve(row-1,col);
+	    solve(row-1,col,count);
 	}
 	else if (maze[row][col-1] == '@'){
 	    maze[row][col] = '.';
 	    count--;
-	    solve(row,col-1);
+	    solve(row,col-1,count);
 	}
-
+	maze[row][col] = '.';
         return -1; //so it compiles
     }
     
