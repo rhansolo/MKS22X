@@ -3,7 +3,7 @@ import java.io.*;
 public class Maze{
     private char[][]maze;
     private boolean animate;//false by default
-    
+    private int count = 0;;
     /*Constructor loads a maze text file, and sets animate to false by default.
       
       1. The file contains a rectangular ascii maze, made with the following 4 characters:
@@ -96,7 +96,6 @@ public class Maze{
 	for (int i = 0; i < maze.length; i++){
 	    for (int j = 0; j < maze[0].length;j++){
 		if (maze[i][j] == 'S'){
-		    maze[i][j] = '@';
 		    System.out.println("" + i + "" + j);
 		    return solve(i,j);
 		}
@@ -143,26 +142,72 @@ public class Maze{
         }
 	
         //COMPLETE SOLVE
-	System.out.println("here");
-	System.out.println("row: " + row + " col: " + col);
-	if (maze[row+1][col] != '#'){
-	    maze[row+1][col] = '@';
+
+	if (maze[row][col] == 'E'){
+	    maze[row][col] = '@';
+	    System.out.println(count);
+	    return 1;
+	}
+	else if (maze[row+1][col] != '#'&& maze[row+1][col] != '@'&& maze[row+1][col] != '.'){
+	    
+	    maze[row][col] = '@';
+	    if (count == 0){
+		maze[row][col] = 'S';
+	    }
+	    count++;
 	    solve(row+1,col);
 	}
-	if (maze[row][col+1] != '#'){
-	    maze[row][col+1] = '@';
+        else if (maze[row][col+1] != '#' && maze[row][col+1] != '@'&& maze[row][col+1] != '.'){
+	    
+	    maze[row][col] = '@';
+	    if (count == 0){
+		maze[row][col] = 'S';
+	    }
+	    count++;
 	    solve(row,col+1);
 	}
-	if (maze[row-1][col] != '#'){
-	    maze[row-1][col] = '@';
+        else if (maze[row-1][col] != '#'&& maze[row-1][col] != '@'&& maze[row-1][col] != '.'){
+	    
+	    maze[row][col] = '@';
+	    if (count == 0){
+		maze[row][col] = 'S';
+	    }
+	    count++;
 	    solve(row-1,col);
 	}
-	if (maze[row][col-1] != '#'){
-	    maze[row][col-1] = '@';
+        else if (maze[row][col-1] != '#'&& maze[row][col-1] != '@'&& maze[row][col-1] != '.'){
+	    
+	    maze[row][col] = '@';
+	    if (count == 0){
+		maze[row][col] = 'S';
+	    }
+	    count++;
 	    solve(row,col-1);
 	}
-	System.out.println("nothing");
 	
+	//maze[row][col] = '.';
+
+	else if (maze[row+1][col] == '@'){
+	    maze[row][col] = '.';
+	    count--;
+	    solve(row+1,col);
+	}
+        else if (maze[row][col+1] == '@'){
+	    maze[row][col] = '.';
+	    count--;
+	    solve(row,col+1);
+	}
+        else if (maze[row-1][col] == '@'){
+	    maze[row][col] = '.';
+	    count--;
+	    solve(row-1,col);
+	}
+	else if (maze[row][col-1] == '@'){
+	    maze[row][col] = '.';
+	    count--;
+	    solve(row,col-1);
+	}
+
         return -1; //so it compiles
     }
     
