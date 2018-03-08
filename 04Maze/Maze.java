@@ -146,64 +146,61 @@ public class Maze{
 	//System.out.println("yoyoyooyooyoy");
 					    
 	//System.out.println(maze[row][col]);
+	
 	if (maze[row][col] == 'E'){
-	    //  System.out.println(count);
-	    System.out.println(count);
-	    System.out.println("hereeeeeeeeeee");
-	    return 1;
+	    return count;
 	}
-	else if (maze[row+1][col] != '#'&& maze[row+1][col] != '@'&& maze[row+1][col] != '.'){
+	maze[row][col] = '@';
+        if (maze[row+1][col] == ' '|| maze[row+1][col] == 'E'){
 	    
-	    maze[row][col] = '@';
+	    
+	    int tmp = solve(row+1,col,count+1);
+	    if ( tmp != -1){
+		return tmp;
+	    }
+	}
 
-	    count ++;
-	    solve(row+1,col,count);
-	}
-        else if (maze[row][col+1] != '#' && maze[row][col+1] != '@'&& maze[row][col+1] != '.'){
-	    
-	    maze[row][col] = '@';
 
-	    count++;
-	    solve(row,col+1,count);
-	}
-        else if (maze[row-1][col] != '#'&& maze[row-1][col] != '@'&& maze[row-1][col] != '.'){
-	    
-	    maze[row][col] = '@';
 
-	    count++;
-	    solve(row-1,col,count);
-	}
-        else if (maze[row][col-1] != '#'&& maze[row][col-1] != '@'&& maze[row][col-1] != '.'){
+        if (maze[row][col+1] == ' '|| maze[row][col+1] == 'E'){
+	    int tmp = solve(row,col+1,count+1);
+	    if ( tmp != -1){
+		return tmp;
+	    }
 	    
-	    maze[row][col] = '@';
+	}
+
+
+
+	if (maze[row-1][col] == ' '|| maze[row-1][col] == 'E'){
+	    
+	    
+	    
+	    int tmp = solve(row-1,col,count+1);
+	    if ( tmp != -1){
+		return tmp;
+	    }
 	   
-	    count++;
-	    solve(row,col-1,count);
 	}
 	
-	//maze[row][col] = '.';
+		maze[row][col] = '.';
+	
+        if (maze[row][col-1] == ' '|| maze[row][col-1] == 'E'){
+	    
+	    
+	    int tmp = solve(row,col-1,count+1);
+	    if ( tmp != -1){
+		return tmp;
+	    }
+	   
+	}
 
-	else if (maze[row+1][col] == '@'){
-	    maze[row][col] = '.';
-	    count--;
-	    solve(row+1,col,count);
-	}
-        else if (maze[row][col+1] == '@'){
-	    maze[row][col] = '.';
-	    count--;
-	    solve(row,col+1,count);
-	}
-        else if (maze[row-1][col] == '@'){
-	    maze[row][col] = '.';
-	    count--;
-	    solve(row-1,col,count);
-	}
-	else if (maze[row][col-1] == '@'){
-	    maze[row][col] = '.';
-	    count--;
-	    solve(row,col-1,count);
-	}
-	//	maze[row][col] = '.';
+		maze[row][col] = '.';
+
+	
+	//maze[row][col] = '.';
+	
+	
 	return -1;
 	//System.out.println("other here"); //so it compiles
 	//return 0;
