@@ -6,7 +6,6 @@ public class Bronze {
 	public static void main(String[] args) throws IOException{
 		int r,c,e,n,rs,cs,ds;
 		BufferedReader br = new BufferedReader(new FileReader("input.txt"));
-		PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter("output.txt")));
 		StringTokenizer st = new StringTokenizer(br.readLine());
 	        
 		r = Integer.parseInt(st.nextToken());
@@ -35,24 +34,27 @@ public class Bronze {
 					depth += e-lake[i][j];
 			}
 		}
-		pw.println(depth*72*72);
-		pw.close();
+		System.out.println(depth*72*72);
 	}
 	
 	public static void stomp (int row, int col, int depth) {
 	    int highestCow;
 	    for (int i = 0; i < depth; i++) {
 	        highestCow = lake[row][col];
-	        for (int j = 0; j < 3; j++)
-	            for (int k = 0; k < 3; k++)
-	                if (lake[row+i][col+j] > highest){ 
+	        for (int j = 0; j < 3; j++){
+	            for (int k = 0; k < 3; k++){
+	                if (lake[row+j][col+k] > highestCow){ 
 	                	highestCow=lake[j+ row][k + col];
 			}
-	        for (i = 0; i < 3; i++)
-	            for (j = 0; j < 3; j++)
-	                if (lake[row+i][col+j] == highest){ 
-	                	lake[row+i][col+j]--;
+		    }
+		}
+	        for (int a = 0; a < 3; a++){
+	            for (int b = 0; b < 3; b++){
+	                if (lake[row+a][col+b] == highestCow){ 
+	                	lake[row+a][col+b]--;
 			}
+		    }
+		}
 	    }
 	} 
 
