@@ -1,4 +1,4 @@
-public class QuickSort{
+public class Quick{
     static int[] arr = new int[]{0,6,4,2,4,7,8,4,34,67,7,3,5,8,5,3,2};
     int pivot = 0; 
     
