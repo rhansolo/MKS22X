@@ -59,7 +59,5 @@ public class Sorts{
 	}
 	negativeValues.extend(positiveValues);
     }
-    private static int getDig(int j, int dig){
-	return (j / (int)Math.round(Math.pow(10, dig - 1)))% 10;
-    }
+ 
 }
