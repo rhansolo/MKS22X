@@ -27,7 +27,7 @@ public class Sorts{
 	    for(int i = 1; i <= largestDigitCount; i++){
 		for(Integer n : positiveValues){
 		    
-		    digits[((n / (int)Math.round(Math.pow(10, i - 1)))% 1)].add(n);
+		    digits[((n / (int)Math.round(Math.pow(10, i - 1)))% 10)].add(n);
 		}
 		
 		positiveValues.clear();
@@ -46,7 +46,7 @@ public class Sorts{
 	    for(int i = 1; i <= largestDigitCount; i++){
 		for(Integer n : origList){
 		    
-		    digits[(n / (int)Math.round(Math.pow(10, i - 1)))% 1].add(n);
+		    digits[(n / (int)Math.round(Math.pow(10, i - 1)))% 10].add(n);
 		}
 		origList.clear();
 		
