@@ -44,9 +44,9 @@ public class Sorts{
 	    
 	    int largestDigitCount = (int)Math.round(Math.log10(-min));
 	    for(int i = 1; i <= largestDigitCount; i++){
-		for(Integer n : origList){
+		for(Integer n : negativeValues){
 		    
-		    digits[(n / (int)Math.round(Math.pow(10, i - 1)))% 10].add(n);
+		    digits[-(n / (int)Math.round(Math.pow(10, i - 1)))% 10].add(n);
 		}
 		origList.clear();
 		
