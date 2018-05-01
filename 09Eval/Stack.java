@@ -1,6 +1,8 @@
 import java.util.LinkedList;
 public class Stack{
     private LinkedList<Double> stack;
+
+
     public Stack(){
 	stack = new LinkedList<Double>();
     }
