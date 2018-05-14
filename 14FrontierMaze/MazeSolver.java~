@@ -1,0 +1,70 @@
+public class MazeSolver{
+
+    private Frontier frontier;
+    private Maze maze;
+ 
+    private boolean animate;
+    
+    public MazeSolver(String input){
+	maze = new Maze(input);
+	animate = false;
+    }
+    public MazeSolver(String input, boolean animate){
+	maze = new Maze(input);
+        this.animate= animate;
+    }
+
+    public boolean solve(){
+	return solve(0);
+    }
+    public boolean solve(int o){
+	
+	if(o == 0){
+	    frontier = new FrontierStack();
+	}else if(o == 1){
+	    
+	    frontier = new FrontierQueue();
+
+	}else{
+	    frontier = new FrontierPriorityQueue();
+	}
+	
+	Location[] neighborArr = maze.getNeighbors(maze.getStart());
+	for(int i = 0; i < neighborArr.length && neighborArr[i] != null; i ++){
+	    frontier.add(neighborArr[i]);
+	}
+	while(frontier.hasNext()){
+	    if(animate){
+		System.out.println(maze.toStringColor(50));
+	    }
+	    
+	    Location next = frontier.next();
+	    maze.set(next.getX(), next.getY(), '.');
+	    Location[] neighbors = maze.getNeighbors(next);
+	    for(int i = 0; i < neighbors.length && neighbors[i] != null; i ++){
+		
+		if( neighbors[i].getY() == maze.getEnd().getY() && neighbors[i].getX() == maze.getEnd().getX()){
+		    Location currPos = neighbors[i].getPrevious();
+		    
+		    while( currPos.getY() != maze.getStart().getY()|| currPos.getX() != maze.getStart().getX() ){
+			maze.set(currPos.getX(), currPos.getY(), '@');
+			if(animate){
+			    System.out.println(maze.toStringColor(10));
+			}
+			currPos = currPos.getPrevious();
+		    }
+		    return true;
+
+		}
+		
+		frontier.add(neighbors[i]);
+		
+		maze.set(neighbors[i].getX(), neighbors[i].getY(), '?');
+	    }	    
+	}
+	return false;
+    }
+    public static void main(String[] args){
+
+    }
+}
