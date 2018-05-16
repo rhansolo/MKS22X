@@ -1,6 +1,7 @@
 public class Location implements Comparable<Location>{
     private double dist;
     private Location prev;
+    private double distAlready;
     private int x,y;
 
     public Location(int x, int y, Location prev, double dist){
@@ -8,6 +9,14 @@ public class Location implements Comparable<Location>{
 	this.y = y;
 	this.dist = dist;
 	this.prev = prev;
+    }
+    public Location( int x, int y, Location prev, double dist, double distAlready){
+	this.x = x;
+	this.y = y;
+	this.dist = dist;
+	this.prev = prev;
+	
+	this.distAlready = distAlready;
     }
     public int getX(){
 	return x;
@@ -19,15 +28,21 @@ public class Location implements Comparable<Location>{
 	return dist;
        
     }
+    public double getDistTraveled(){
+	return distAlready;
+    }
     public Location getPrev(){
 	return prev;
     }
     public int compareTo(Location l){
-	if(this.dist - l.getDist() > 0){
+	double curr = getDist() + getDistTraveled();
+	double other = l.getDist() + getDistTraveled();
+	
+	if(curr - other > 0){
 	    return 1;
 	    
 	}
-	else if (this.dist-l.getDist()< 0){
+	else if (curr-other< 0){
 	    return -1;
 	}
 	else {

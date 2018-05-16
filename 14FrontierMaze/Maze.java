@@ -7,33 +7,40 @@ public class Maze{
     private static final String SHOW_CURSOR =  "\033[?25h";
     Location start,end;
     private char[][]maze;
+    private boolean setAStar;
 
    public Location[] getNeighbors(Location L){
-       Location[] neighbors = new Location[4];
-       int i = 0;
-       if((L.getY() + 1 < maze[0].length && maze[L.getX()][L.getY() + 1] == ' ') ||( L.getY() + 1 < maze[0].length && maze[L.getX()][L.getY() + 1] == 'E')) {
-	   
-	   neighbors[i] = new Location(L.getX(), L.getY() + 1, L, Math.abs(getEnd().getX() - L.getX()) + Math.abs(getEnd().getY() - (L.getY() + 1)));
-	   i++;
-
-       }
-       
-       if((L.getX() + 1 < maze.length && maze[L.getX() + 1][L.getY()] == ' ') || (L.getX() + 1 < maze.length && maze[L.getX() + 1][L.getY()] == 'E')){
-           neighbors[i] = new Location(L.getX() + 1, L.getY(), L, Math.abs(getEnd().getX() - (L.getX() + 1)) + Math.abs(getEnd().getY() - L.getY()));
-	   i++;
-       }
+	Location[] neighbors = new Location[4];
+	int count = 0;
+	if(L.getX() >= maze.length || L.getY() >= maze[0].length){
+	    return null;
+	}
 	
-       if((L.getY() - 1 >= 0 && maze[L.getX()][L.getY() - 1] == ' ') || (L.getY() - 1 >= 0 && maze[L.getX()][L.getY() - 1] == 'E')){
-	   neighbors[i] = new Location(L.getX(), L.getY() - 1, L, Math.abs(getEnd().getX() - L.getX()) + Math.abs(getEnd().getY() - (L.getY() - 1)));
-	   i++;
-       }
+	int[][] cords = {{L.getX() + 1, L.getY()},{L.getX() - 1, L.getY()},{L.getX(), L.getY() + 1},{L.getX(), L.getY() - 1}};
+	
+	for(int cord[]: cords){
+	    if(cord[0] >= 0 && cord[0] < maze.length && cord[1] >= 0 && cord[1] < maze[0].length){
 
-      
-       if((L.getX() - 1 >= 0  && maze[L.getX() - 1][L.getY()] == ' ') ||( L.getX() - 1 >= 0  && maze[L.getX() - 1][L.getY()] == 'E')){
-           neighbors[i] = new Location(L.getX() - 1, L.getY(), L, Math.abs(getEnd().getX() - (L.getX() - 1)) + Math.abs(getEnd().getY() - L.getY()));
-       }
-       
-       return neighbors;
+		if( maze[cord[0]][cord[1]] == ' '||  maze[cord[0]][cord[1]] == 'E' ){
+		    
+		    if(maze[cord[0]][cord[1]] != 'E'){
+			maze[cord[0]][cord[1]] = '?';
+		    }
+		    double dist = Math.abs((end.getX()-cord[0]-1)) + Math.abs((end.getY()-cord[1]+1));
+		    
+		    if(setAStar){
+			neighbors[count] = new Location(cord[0], cord[1], L, dist, 1+L.getDistTraveled());
+		    }
+		    
+		    else{
+			neighbors[count] = new Location(cord[0], cord[1], L, dist, 0);	
+		    }
+		}
+		
+		count++;
+	    }
+	}
+	return neighbors ;
     }
 
     public Location getStart(){
@@ -60,8 +67,9 @@ public class Maze{
 
     public Maze(String filename){
 	ArrayList<char[]> lines = new ArrayList<char[]>();
-	int startr=-1, startc=-1;
-	int endr=-1,endc=-1;
+	int start1=-1, start2=-1
+	    ;
+	int end1=-1,end2=-1;
 	try{
 	    Scanner in = new Scanner(new File(filename));
 	    while(in.hasNext()){
@@ -75,12 +83,12 @@ public class Maze{
 	for(int i = 0; i < maze.length; i++){
 	    maze[i]=lines.get(i);
 	}
-	for(int r=0; r<maze.length;r++){
-	    for(int c=0; c<maze[r].length;c++){
+	for(int r =0; r< maze.length;r++){
+	    for(int c = 0; c < maze[r].length;c++){
 		if(maze[r][c]=='S'){
-		    if(startr == -1){
-			startr=r;
-			startc=c;
+		    if(start1 == -1){
+			start1=r;
+			start2=c;
 		    }else{
 			System.out.println("Multiple 'S' found!");
 			System.exit(0);
@@ -90,9 +98,9 @@ public class Maze{
 		if(maze[r][c]=='E'){
 		    //erase E
 		    //maze[r][c]=' ';
-		    if(endr == -1){
-			endr=r;
-			endc=c;
+		    if(end1 == -1){
+			end1=r;
+			end2=c;
 		    }else{
 			System.out.println("Multiple 'E' found!");
 			System.exit(0);
@@ -100,7 +108,7 @@ public class Maze{
 		}
 	    }
 	}
-	if(startr == -1 || endr == -1){
+	if(start1 == -1 || end1 == -1){
 	    System.out.println("Missing 'S' or 'E' from maze.");
 	    System.exit(0);
 
@@ -111,8 +119,8 @@ public class Maze{
     The start/end Locations may need more information later when we add
     other kinds of frontiers!
 	*/
-	end = new Location(endr,endc,null, 0);
-	start = new Location(startr,startc,null, Math.abs(endr-startr) + Math.abs(endc-startc));
+	end = new Location(end1,end2,null, 0);
+	start = new Location(start1,start2,null, Math.abs(end1-start1) + Math.abs(end2-start2));
     }
 
     public String toStringColor(){
@@ -153,7 +161,9 @@ public class Maze{
     public void set(int row,int col, char n){
 	maze[row][col] = n;
     }
-
+    public void  applyAStar(){
+	setAStar = true;
+    }
     public static String colorize(String s){
 	String ans = "";
 	Scanner in = new Scanner(s);

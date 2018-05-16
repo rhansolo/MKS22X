@@ -22,7 +22,7 @@ public class MazeSolver{
     }
 
     public boolean solve(){
-	return solve(0);
+	return solve(3);
     }
     public void switchAnimate(boolean ani){
 	animate = ani;
@@ -32,59 +32,64 @@ public class MazeSolver{
 	if(o == 0){
 	    frontier = new QueueFrontier();
 
-	}else if(o == 1){
+	}
+	else if(o == 1){
 	    
 	    frontier = new StackFrontier();
 
-	}else{
-	    
+	}
+	else if (o == 2){
 	    frontier = new PriorityQueueFrontier();
 	}
+	else{
+	    maze.applyAStar();
+	    
+	}
 	
-	Location[] neighborArr = maze.getNeighbors(maze.getStart());
-	for(int i = 0; i < neighborArr.length; i ++){
-	    if (neighborArr[i] != null){
-		frontier.add(neighborArr[i]);
-	    }
-	}
+	frontier.add(maze.getStart());
+
+	
+	Location end = maze.getEnd();
+
 	while(frontier.hasNext()){
-	    
-	    if(animate){
-		System.out.println(maze.toStringColor(50));
+
+  
+	    Location previous = frontier.next();
+	    Location[] nextLocations = maze.getNeighbors(previous);
+	    for(Location l: nextLocations){
+		if(l != null){
+
+		    char sym = maze.get(l.getX(), l.getY());
+		    if(sym == 'E'){
+			maze.set(previous.getX(), previous.getY(), '.');
+			
+			maze.end = new Location(l.getX(), l.getY(), previous,0);
+			end = maze.getEnd();
+			while(end.getPrev() != null &&( !end.getPrev().equals(maze.getStart()))){
+			    end = end.getPrev();
+			    
+			    maze.set(end.getX(), end.getY(), '@');
+	    			    
+			}
+			System.out.println(maze.toStringColor());
+
+			return true;
+		    }
+		    if(sym == '?'){
+			frontier.add(l);
+		    }
+		}
 	    }
 	    
-	    Location next = frontier.next();
-
-	    maze.set(next.getX(), next.getY(), '.');
-	    
-	    Location[] neighborsList = maze.getNeighbors(next);
-	    
-	    for(int i = 0; i < neighborsList.length && neighborsList[i] != null; i ++){
+	    System.out.println(maze.toStringColor());
+	    if(maze.get(previous.getX(), previous.getY()) != 'S'){
 		
-		if( neighborsList[i].getY() == maze.getEnd().getY() && neighborsList[i].getX() == maze.getEnd().getX()){
-		    Location currPos = neighborsList[i].getPrev();
-		    
-		    while( currPos.getY() != maze.getStart().getY()|| currPos.getX() != maze.getStart().getX() ){
-			maze.set(currPos.getX(), currPos.getY(), '@');
-			if(animate){
-			    
-			    System.out.println(maze.toStringColor(10));
-			}
-
-			
-			currPos = currPos.getPrev();
-		    }
-		    return true;
-
-		}
-		
-		frontier.add(neighborsList[i]);
-
-		
-		maze.set(neighborsList[i].getX(), neighborsList[i].getY(), '?');
-	    }	    
+		maze.set(previous.getX(), previous.getY(), '.');
+	    }
 	}
+      
 	return false;
     }
+	
     
 }
