@@ -2,27 +2,23 @@ import java.util.*;
 
 public class StackFrontier implements Frontier{
     
-    private MyDeque<Location> pos;
+    private Stack<Location> pos;
     
     public StackFrontier(){
-        pos = new MyDeque<>();
+        pos = new Stack<>();
     }
     public boolean hasNext(){
-	try{
-	    return pos.getFirst() != null;
-	}catch(NoSuchElementException e){
-	    return false;
-	}
+	return pos.size() != 0;
     }
  
     
     public Location next(){
 
-	return pos.removeFirst();
+	return pos.pop();
     }
     public void add(Location next){
 
-	pos.addFirst(next);
+	pos.push(next);
     }
 
 }

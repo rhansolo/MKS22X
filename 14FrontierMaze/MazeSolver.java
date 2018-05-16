@@ -4,7 +4,14 @@ public class MazeSolver{
     private Maze maze;
  
     private boolean animate;
-    
+    public static void main(String[] args){
+	
+	MazeSolver i = new MazeSolver("data3.txt");
+
+	i.switchAnimate(true);
+	
+	i.solve(0);
+    }
     public MazeSolver(String input){
 	maze = new Maze(input);
 	animate = false;
@@ -16,6 +23,9 @@ public class MazeSolver{
 
     public boolean solve(){
 	return solve(0);
+    }
+    public void switchAnimate(boolean ani){
+	animate = ani;
     }
     public boolean solve(int o){
 	
@@ -57,8 +67,11 @@ public class MazeSolver{
 		    while( currPos.getY() != maze.getStart().getY()|| currPos.getX() != maze.getStart().getX() ){
 			maze.set(currPos.getX(), currPos.getY(), '@');
 			if(animate){
+			    
 			    System.out.println(maze.toStringColor(10));
 			}
+
+			
 			currPos = currPos.getPrev();
 		    }
 		    return true;
