@@ -3,15 +3,16 @@ public class RunningMedian{
     private MyHeap<Double> max;
     private MyHeap<Double> min;
     private double med;
+    private int size;
  
     
     public RunningMedian(){
-	max = new MyHeap<Double>(false);
-	min = new MyHeap<Double>();
+	max = new MyHeap<Double>(true);
+	min = new MyHeap<Double>(false);
     }
     public RunningMedian(double[] arr){
-	min = new MyHeap<Double>();
-	max = new MyHeap<Double>(false);
+	min = new MyHeap<Double>(false);
+	max = new MyHeap<Double>(true);
 	for (int i = 0; i < arr.length; i++){
 	    add(arr[i]);
 	}
@@ -37,33 +38,31 @@ public class RunningMedian{
 	return med;
     }
 
-    public void add(Double val){
-	if(min.size() == 0 && max.size() == 0){
-	    min.add(val);
+    public void add(Double value){
+	if ( value.compareTo(getMedian()) > 0 || size == 0){
+	    min.add(value);
 	}
-	else{
-	    if(val < min.peek()){
-		min.add(val);
-		if(min.size() - max.size() == 2){
-		    max.add(min.remove());
-		}
+	else {
+	    max.add(value);
+	}
+	if (Math.abs(max.size()-min.size()) > 1){
+	    if (max.size() > min.size()){
+		min.add(max.remove());
 	    }
-	    else{
-		max.add(val);
-		if(max.size() - min.size() == 2){
-		    min.add(max.remove());
-		}
+	    else if (min.size() > max.size()) {
+		max.add(min.remove());
 	    }
 	}
+	size++;
     }
     public int size(){
-	return max.size() + min.size();
+	return size;
     }
     public static void main(String[] args){
-    double[] data = {1.0,3.0,5.0,4.0,2.0};
+    double[] data = {1.0,5.0,3.0,4.0,2.0};
     RunningMedian a = new RunningMedian(data);
     System.out.println(a.getMedian()); //3
- System.out.println(a.min);
+    System.out.println(a.min);
     System.out.println(a.max);
     a.add(6.0);
     System.out.println(a.getMedian()); //3.5
