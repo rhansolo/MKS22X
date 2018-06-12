@@ -1,11 +1,13 @@
 import java.util.*;
 
 public class MyHeap<T extends Comparable<T>>{
+
     private int size;
     
     private T[] arr;
     private boolean maxHeap;
 
+    
     @SuppressWarnings("unchecked")
     public MyHeap(){
 	maxHeap = true;
@@ -47,50 +49,45 @@ public class MyHeap<T extends Comparable<T>>{
     }
     
     public T remove(){
-	T ans = arr[0];
-	arr[0] = arr[size - 1];
-	arr[size] = null;
-	int currIndex = 0;
-	while(
-	    ((2 * currIndex + 1 < size) && ((arr[currIndex].compareTo(arr[2 * currIndex + 1]) > 0 && !maxHeap)||
-	    ((2 * currIndex + 2 < size) && arr[currIndex].compareTo(arr[2 * currIndex + 2]) > 0) && !maxHeap))||
-	    ((2 * currIndex + 1 < size) && ((arr[currIndex].compareTo(arr[2 * currIndex + 1]) < 0 && maxHeap) ||
-	    ((2 * currIndex + 2 < size) && arr[currIndex].compareTo(arr[2 * currIndex + 2]) < 0) && maxHeap)) ) {
-	    
-            if(
-	       2 * currIndex + 2 == size &&
-	      (maxHeap && (arr[currIndex].compareTo(arr[2 * currIndex + 1]) < 0)||
-	      (!maxHeap && (arr[currIndex].compareTo(arr[2 * currIndex + 1]) > 0 )))){
-		
-		T temp = arr[2 * currIndex + 1];
-		arr[2 * currIndex + 1] = arr[currIndex];
-		arr[currIndex] = temp;
-		currIndex = 2 * currIndex + 1;
-            }
-	    else if( (arr[currIndex].compareTo(arr[2 * currIndex + 2]) > 0  && !maxHeap) || (maxHeap  && arr[currIndex].compareTo(arr[2 * currIndex + 2]) < 0 )) { 
-		T temp = arr[2 * currIndex + 2];
-		arr[2 * currIndex + 2] = arr[currIndex];
-		arr[currIndex] = temp;
-		currIndex = 2 * currIndex + 2;
-            }
-            else if((2 * currIndex + 2 < size) &&
-		    (arr[2 * currIndex + 1].compareTo(arr[2 * currIndex + 2]) >= 0 && maxHeap && (arr[currIndex].compareTo(arr[2 * currIndex + 1]) < 0)) ||
-		    (arr[2 * currIndex + 1].compareTo(arr[2 * currIndex + 2]) <= 0 && !maxHeap && (arr[currIndex].compareTo(arr[2 * currIndex + 1]) > 0 )) )  {
-		T temp = arr[2 * currIndex + 1];
-		
-		arr[2 * currIndex + 1] = arr[currIndex];
+	
+	if (size == 0){
+	    return null;
+	}
+	size --;
+	T removed = peek();
+	arr[0] = arr[size-1];
+	push(0);
+	return removed;
+    }
+    public void push(int index){
+	int leftChild = 2*index + 1;
+	int rightChild = 2*index + 2;
+	
+	if (leftChild >= size){
+	}
+	if (rightChild >= size){
+	    if (maxHeap && arr[index].compareTo(arr[leftChild]) < 0 || !maxHeap && arr[index].compareTo(arr[leftChild]) > 0){
+		swap(index,leftChild);
+		push(leftChild);
+	    }
+	}
+	else if (!maxHeap && arr[index].compareTo(arr[leftChild]) > 0 || maxHeap && arr[index].compareTo(arr[leftChild]) < 0 ){
 
-		arr[currIndex] = temp;
-		currIndex = 2 * currIndex + 1;
-            }
-    
-  
+	    if (maxHeap && arr[leftChild].compareTo(arr[rightChild]) >= 0 || !maxHeap && arr[leftChild].compareTo(arr[rightChild]) <= 0){
+		swap(index,leftChild);
+		push(leftChild);
+	    }
+	    else {
+		swap(index,rightChild);
+		push(rightChild);
+	    }
 	}
 	
-	size--;
-	return ans;
+	else if (!maxHeap && arr[index].compareTo(arr[rightChild]) > 0 || maxHeap && arr[index].compareTo(arr[rightChild]) < 0 ){
+	    swap(index,rightChild);
+	    push(rightChild);
+	}
     }
-    
     public T peek(){
 	
 	return arr[0];
@@ -99,13 +96,18 @@ public class MyHeap<T extends Comparable<T>>{
     public int size(){
 	return size;
     }
-    
+    public void swap(int index1, int index2){
+	T temp = arr[index1];
+	arr[index1] = arr[index2];
+	arr[index2] = temp;
+    }
     public String toString(){
-	String ans = "{";
-	for(int i = 0; i < size; i++){
-	    ans += arr[i] + ", ";
+	String ans = "[";
+	ans += arr[0];
+	for(int i = 1; i < size; i++){
+	    ans += "," + arr[i] ;
 	}
-	ans += "}";
+	ans += "]";
 	return ans;
     }
 }
